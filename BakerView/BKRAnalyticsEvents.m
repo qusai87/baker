@@ -50,7 +50,7 @@
     if (self) {
     
         // ****** Add here your analytics code
-        // tracker = [[GAI sharedInstance] trackerWithTrackingId:@"ADD_HERE_YOUR_TRACKING_CODE"];
+        // id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"ADD_HERE_YOUR_TRACKING_CODE"];
     
         // ****** Register to handle events
         [self registerEvents];
