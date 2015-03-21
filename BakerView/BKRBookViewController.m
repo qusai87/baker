@@ -138,7 +138,14 @@
     // Avoids strange animations when opening
     [self setPageSize:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
 
-
+    // SOCIAL MEDIA INTEGRATION - START
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]
+                                     initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                     target:self
+                                     action:@selector(shareBtnAction:)];
+    self.navigationItem.rightBarButtonItem = shareButton;
+    // SOCIAL MEDIA INTEGRATION - END
+    
     // ****** SCROLLVIEW INIT
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, pageWidth, pageHeight)];
     self.scrollView.showsHorizontalScrollIndicator = YES;
@@ -200,6 +207,71 @@
     [self saveBookStatusWithScrollIndex];
     adjustViewsOnAppDidBecomeActive = YES;
 }
+
+// SOCIAL MEDIA INTEGRATION - START
+
+- (UIImage *)resizeImage:(UIImage*)image {
+    
+    int maxw=320;
+    CGSize newSize = CGSizeMake(maxw, image.size.height * (maxw/image.size.width));
+    
+    CGRect newRect = CGRectIntegral(CGRectMake(0, 0, newSize.width, newSize.height));
+    CGImageRef imageRef = image.CGImage;
+    
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // Set the quality level to use when rescaling
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, newSize.height);
+    
+    CGContextConcatCTM(context, flipVertical);
+    // Draw into the context; this scales the image
+    CGContextDrawImage(context, newRect, imageRef);
+    
+    // Get the resized image from the context and a UIImage
+    CGImageRef newImageRef = CGBitmapContextCreateImage(context);
+    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
+    
+    CGImageRelease(newImageRef);
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+
+
+- (void) shareBtnAction:(UIButton *)sender {
+    
+    if (![self checkScreeshotForPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]]) {
+        [self takeScreenshotFromView:_currPage forPage:_currentPageNumber andOrientation:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
+    }
+    
+    NSString *screenshotFile = [cachedScreenshotsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"screenshot-%@-%i.jpg", [self getCurrentInterfaceOrientation:self.interfaceOrientation], _currentPageNumber]];
+    
+    // items to share
+    
+    NSString *appName=[[[NSBundle mainBundle] infoDictionary]  objectForKey:@"CFBundleDisplayName"];
+    NSString *url = [ _book.url stringByReplacingOccurrencesOfString:@"book" withString:@"http"];
+    
+    NSString *message = [NSString stringWithFormat:@"Estoy leyendo el libro \"%@\" del proyecto \"%@\". Míralo en %@", _book.title, appName, url ];
+    
+    UIImage *image = [UIImage imageWithContentsOfFile: screenshotFile];
+    UIImage *small = [self resizeImage:image];
+    
+    NSArray *items =  @[message, small];
+    
+    
+    // create the controller
+    UIActivityViewController *controller = [[UIActivityViewController alloc]initWithActivityItems:items applicationActivities:nil];
+    
+    // Exclude Irrelevant Parts
+    controller.excludedActivityTypes = @[UIActivityTypePostToWeibo,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact,UIActivityTypeSaveToCameraRoll];
+    [self presentViewController:controller animated:YES completion:nil];
+    
+}
+// SOCIAL MEDIA INTEGRATION - END
+
 - (void)viewDidAppear:(BOOL)animated {
 
     if (!currentPageWillAppearUnderModal) {
