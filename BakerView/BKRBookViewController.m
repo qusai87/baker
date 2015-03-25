@@ -210,6 +210,7 @@
 
 // SOCIAL MEDIA INTEGRATION - START
 
+// Reduce Image size before sharing
 - (UIImage *)resizeImage:(UIImage*)image {
     
     int maxw=320;
