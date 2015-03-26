@@ -37,6 +37,7 @@
 #import "BKRBookViewController.h"
 #import "BKRPageTitleLabel.h"
 #import "BKRUtils.h"
+#import "BKRSettings.h"
 #import "NSObject+BakerExtensions.h"
 #import "UIScreen+BakerExtensions.h"
 
@@ -139,11 +140,13 @@
     [self setPageSize:[self getCurrentInterfaceOrientation:self.interfaceOrientation]];
 
     // SOCIAL MEDIA INTEGRATION - START
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]
+    if ([BKRSettings sharedSettings].showSocialShareButton) {
+        UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]
                                      initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                      target:self
                                      action:@selector(shareBtnAction:)];
-    self.navigationItem.rightBarButtonItem = shareButton;
+        self.navigationItem.rightBarButtonItem = shareButton;
+    }
     // SOCIAL MEDIA INTEGRATION - END
     
     // ****** SCROLLVIEW INIT
