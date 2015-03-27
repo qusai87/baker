@@ -258,7 +258,8 @@
     NSString *appName=[[[NSBundle mainBundle] infoDictionary]  objectForKey:@"CFBundleDisplayName"];
     NSString *url = [ _book.url stringByReplacingOccurrencesOfString:@"book" withString:@"http"];
     
-    NSString *message = [NSString stringWithFormat:@"Estoy leyendo el libro \"%@\" del proyecto \"%@\". Míralo en %@", _book.title, appName, url ];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"SOCIAL_SHARE_BUTTON_MESSAGE", nil), _book.title, appName, url ];
+    
     
     UIImage *image = [UIImage imageWithContentsOfFile: screenshotFile];
     UIImage *small = [self resizeImage:image];

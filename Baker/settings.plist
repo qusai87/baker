@@ -88,6 +88,6 @@
 	<key>issuesProgressbarTintColor</key>
 	<string>#bc242a</string>
 	<key>showSocialShareButton</key>
-	<false/>
+	<true/>
 </dict>
 </plist>
