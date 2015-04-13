@@ -141,11 +141,11 @@
 
     // SOCIAL MEDIA INTEGRATION - START
     if ([BKRSettings sharedSettings].showSocialShareButton) {
-        UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]
-                                     initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                     target:self
-                                     action:@selector(shareBtnAction:)];
-        self.navigationItem.rightBarButtonItem = shareButton;
+        self.shareButton = [[UIBarButtonItem alloc]
+                            initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                            target:self
+                            action:@selector(shareBtnAction:)];
+        self.navigationItem.rightBarButtonItem = self.shareButton;
     }
     // SOCIAL MEDIA INTEGRATION - END
     
@@ -272,7 +272,12 @@
     
     // Exclude Irrelevant Parts
     controller.excludedActivityTypes = @[UIActivityTypePostToWeibo,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact,UIActivityTypeSaveToCameraRoll];
-    [self presentViewController:controller animated:YES completion:nil];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [self presentViewController:controller animated:YES completion:nil];
+    } else {
+        UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:controller];
+        [popup presentPopoverFromBarButtonItem:self.shareButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
     
 }
 // SOCIAL MEDIA INTEGRATION - END
