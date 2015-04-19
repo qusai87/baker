@@ -3,27 +3,27 @@
     {
       "idiom" : "iphone",
       "scale" : "1x",
-      "filename" : "shelf-header.png"
+      "filename" : "shelf-header-iphone.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "shelf-header@2x.png"
+      "filename" : "shelf-header-iphone@2x.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "shelf-header@2x-1.png"
+      "filename" : "shelf-header-iphone@3x.png"
     },
     {
       "idiom" : "ipad",
       "scale" : "1x",
-      "filename" : "shelf-header-1.png"
+      "filename" : "shelf-header-ipad.png"
     },
     {
       "idiom" : "ipad",
       "scale" : "2x",
-      "filename" : "shelf-header@2x-2.png"
+      "filename" : "shelf-header-ipad@2x.png"
     }
   ],
   "info" : {

@@ -824,6 +824,13 @@
 }
 
 - (int)getBannerHeight {
+    if (self.view.frame.size.width == 375) {
+       return [[BKRSettings sharedSettings].issuesShelfOptions[[NSString stringWithFormat:@"headerHeight%@%@x2", [self getDeviceString], [self getOrientationString]]] intValue];
+    }
+    if (self.view.frame.size.width == 414) {
+        return [[BKRSettings sharedSettings].issuesShelfOptions[[NSString stringWithFormat:@"headerHeight%@%@x3", [self getDeviceString], [self getOrientationString]]] intValue];
+    }
+
     return [[BKRSettings sharedSettings].issuesShelfOptions[[NSString stringWithFormat:@"headerHeight%@%@", [self getDeviceString], [self getOrientationString]]] intValue];
 }
 
