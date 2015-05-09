@@ -223,25 +223,25 @@
     // SETUP ACTION BUTTON
     NSString *status = [self.issue getStatus];
     if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchasable"] || [status isEqualToString:@"purchased"]) {
-        self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset, 110, 30);
+        self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset -30, 110, 30);
     } else if ([status isEqualToString:@"downloaded"] || [status isEqualToString:@"bundled"]) {
-        self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset, 80, 30);
+        self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset -30, 80, 30);
     }
     self.actionButton.titleLabel.font = actionFont;
 
     // SETUP ARCHIVE BUTTON
-    self.archiveButton.frame = CGRectMake(ui.contentOffset + 80 + 10, heightOffset, 80, 30);
+    self.archiveButton.frame = CGRectMake(ui.contentOffset + 80 + 10, heightOffset -30, 80, 30);
     self.archiveButton.titleLabel.font = archiveFont;
 
     // SETUP DOWN/LOADING SPINNER AND LABEL
-    self.spinner.frame = CGRectMake(ui.contentOffset, heightOffset, 30, 30);
-    self.loadingLabel.frame = CGRectMake(ui.contentOffset + self.spinner.frame.size.width + 10, heightOffset, 135, 30);
+    self.spinner.frame = CGRectMake(ui.contentOffset, heightOffset-30, 30, 30);
+    self.loadingLabel.frame = CGRectMake(ui.contentOffset + self.spinner.frame.size.width + 10, heightOffset-30, 135, 30);
     self.loadingLabel.font = actionFont;
 
 //    heightOffset = heightOffset + self.loadingLabel.frame.size.height + 5;
 
     // SETUP PROGRESS BAR
-    self.progressBar.frame = CGRectMake(ui.contentOffset, 136, labelWidth, 30);
+    self.progressBar.frame = CGRectMake(ui.contentOffset, heightOffset-30, labelWidth, 30);
 }
 
 - (void)preferredContentSizeChanged:(NSNotification*)notification {
@@ -594,16 +594,16 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UI iPad = {
             .cellPadding   = 30,
-            .thumbWidth    = 135,
-            .thumbHeight   = 180,
+            .thumbWidth    = 125,
+            .thumbHeight   = 160,
             .contentOffset = 184
         };
         return iPad;
     } else {
         UI iPhone = {
-            .cellPadding   = 22,
-            .thumbWidth    = 87,
-            .thumbHeight   = 116,
+            .cellPadding   = 20,
+            .thumbWidth    = 95,
+            .thumbHeight   = 135,
             .contentOffset = 128
         };
         return iPhone;
@@ -614,7 +614,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return 240;
     } else {
-        return 190;
+        return 160;
     }
 }
 
