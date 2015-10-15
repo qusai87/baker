@@ -40,6 +40,7 @@
 @property (copy, nonatomic) NSString *parseError;
 
 @property (nonatomic, copy) NSNumber *hpub;
+@property (nonatomic, copy) NSNumber *version;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *date;
 

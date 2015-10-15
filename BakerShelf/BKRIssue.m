@@ -54,7 +54,9 @@
         _url        = [NSURL URLWithString:book.url];
         _path       = book.path;
         _categories = book.categories;
+        _version = book.version;
         _productID  = @"";
+        _update = FALSE;
         _price      = nil;
         _bakerBook  = book;
 
@@ -86,18 +88,21 @@
 - (id)initWithIssueData:(NSDictionary*)issueData {
     self = [super init];
     if (self) {
+        
         self.ID         = issueData[@"name"];
         self.title      = issueData[@"title"];
         self.info       = issueData[@"info"];
         self.date       = issueData[@"date"];
         self.categories = issueData[@"categories"];
+        self.version = issueData[@"version"];
         self.coverURL   = [NSURL URLWithString:issueData[@"cover"]];
         self.url        = [NSURL URLWithString:issueData[@"url"]];
+        
         if (issueData[@"product_id"] != [NSNull null]) {
             self.productID = issueData[@"product_id"];
         }
         self.price = nil;
-
+        self.update = false;
         purchasesManager = [BKRPurchasesManager sharedInstance];
 
         self.coverPath = [self.bkrCachePath stringByAppendingPathComponent:self.ID];
@@ -115,6 +120,33 @@
         self.transientStatus = BakerIssueTransientStatusNone;
 
         [self setNotificationDownloadNames];
+       
+        self.IssueManifestPath = [self.bkrCachePath stringByAppendingPathComponent: [NSString stringWithFormat:@"%@_issue.json", self.ID ]];
+       
+        NSData* cachedIssueData = nil;
+        NSError* error = nil;
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.IssueManifestPath]) {
+            NSLog(@"[BakerShelf] Loading cached Shelf manifest from %@", self.IssueManifestPath);
+            cachedIssueData = [NSData dataWithContentsOfFile:self.IssueManifestPath options:NSDataReadingMappedIfSafe error:&error];
+            if (error) {
+                NSLog(@"[BakerShelf] Error loading cached copy of 'issue.json': %@", error);
+            } else {
+                
+                
+                if (cachedIssueData) {
+                    NSMutableDictionary  * cachedIssueJSON = [NSJSONSerialization JSONObjectWithData:cachedIssueData options: NSJSONReadingMutableContainers error: &error];
+                    
+                    NSLog(@"Cached Issue  : %@ ", cachedIssueJSON);
+
+                    if ([cachedIssueJSON[@"version"] integerValue]  < [issueData[@"version"] integerValue]) {
+                        self.update = true;
+                    }
+                    
+                }
+                
+            }
+        }
     }
     return self;
 }
@@ -134,6 +166,7 @@
     BKRReachability *reach = [BKRReachability reachabilityWithHostname:@"www.google.com"];
     if ([reach isReachable]) {
         BKRBakerAPI *api = [BKRBakerAPI sharedInstance];
+        NSLog(@"Get Hpub from url: %@", self.url);
         NSURLRequest *req = [api requestForURL:self.url method:@"GET"];
 
         NKLibrary *nkLib = [NKLibrary sharedLibrary];
@@ -141,6 +174,27 @@
 
         NKAssetDownload *assetDownload = [nkIssue addAssetWithRequest:req];
         [self downloadWithAsset:assetDownload];
+        
+        [[NSFileManager defaultManager] createFileAtPath:self.IssueManifestPath contents:nil attributes:nil];
+        NSDictionary *jsonObject = nil;
+        if (self.version) {
+            jsonObject = @{@"version": self.version};
+        } else {
+            jsonObject = @{@"version": @"1"};
+        }
+        
+        self.update = false;
+        NSError* error= nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:NSJSONWritingPrettyPrinted error:nil];
+        [jsonData writeToFile:self.IssueManifestPath
+                      options:NSDataWritingAtomic
+                        error:&error];
+        if (error) {
+            NSLog(@"[BakerShelf] ERROR: Unable to cache 'issue' manifest: %@", error);
+        }
+        
+
+        
     } else {
         [[NSNotificationCenter defaultCenter] postNotificationName:self.notificationDownloadErrorName object:self userInfo:nil];
     }
@@ -277,6 +331,9 @@
                 return @"unpriced";
             }
         } else {
+            if ([nkIssueStatus isEqualToString:@"downloaded"] && self.update) {
+                return @"update";
+            }
             return nkIssueStatus;
         }
     } else {

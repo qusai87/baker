@@ -235,7 +235,7 @@
             NSString *targetStatus = [targetIssue getStatus];
             NSLog(@"[AppDelegate] Push Notification - Target status: %@", targetStatus);
 
-            if ([targetStatus isEqualToString:@"remote"] || [targetStatus isEqualToString:@"purchased"]) {
+            if ([targetStatus isEqualToString:@"remote"] || [targetStatus isEqualToString:@"purchased"]  || [targetStatus isEqualToString:@"update"]) {
                 [targetIssue download];
             } else if ([targetStatus isEqualToString:@"purchasable"] || [targetStatus isEqualToString:@"unpriced"]) {
                 NSLog(@"[AppDelegate] Push Notification - You are not entitled to download issue '%@', issue not purchased yet", targetIssue.ID);

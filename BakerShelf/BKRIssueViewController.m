@@ -222,7 +222,7 @@
 
     // SETUP ACTION BUTTON
     NSString *status = [self.issue getStatus];
-    if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchasable"] || [status isEqualToString:@"purchased"]) {
+    if ([status isEqualToString:@"remote"]  ||  [status isEqualToString:@"update"]  || [status isEqualToString:@"purchasable"] || [status isEqualToString:@"purchased"]) {
         self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset -30, 110, 30);
     } else if ([status isEqualToString:@"downloaded"] || [status isEqualToString:@"bundled"]) {
         self.actionButton.frame = CGRectMake(ui.contentOffset, heightOffset -30, 80, 30);
@@ -271,6 +271,14 @@
         [self.actionButton setTitle:NSLocalizedString(@"FREE_TEXT", nil) forState:UIControlStateNormal];
         [self.spinner stopAnimating];
 
+        self.actionButton.hidden  = NO;
+        self.archiveButton.hidden = YES;
+        self.progressBar.hidden   = YES;
+        self.loadingLabel.hidden  = YES;
+    } else if ([status isEqualToString:@"update"]) {
+        NSLog(@"[BakerShelf] '%@' need Update ...", self.issue.ID);
+        [self.spinner stopAnimating];
+        [self.actionButton setTitle:NSLocalizedString(@"ACTION_UPDATE_TEXT", nil) forState:UIControlStateNormal];
         self.actionButton.hidden  = NO;
         self.archiveButton.hidden = YES;
         self.progressBar.hidden   = YES;
@@ -368,7 +376,7 @@
 
 - (void)actionButtonPressed:(UIButton*)sender {
     NSString *status = [self.issue getStatus];
-    if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchased"]) {
+    if ([status isEqualToString:@"remote"] || [status isEqualToString:@"purchased"]  || [status isEqualToString:@"update"]) {
         if ([BKRSettings sharedSettings].isNewsstand) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"BakerIssueDownload" object:self]; // -> Baker Analytics Event
             [self download];

@@ -61,6 +61,7 @@
 
 // Issue buttons
 "ACTION_REMOTE_TEXT" = "DOWNLOAD";
+"ACTION_UPDATE_TEXT" = "Update";
 "ACTION_DOWNLOADED_TEXT" = "Read";
 "ACTION_BUY_TEXT" = "Buy";
 "ARCHIVE_TEXT" = "Delete";

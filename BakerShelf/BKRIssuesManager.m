@@ -69,6 +69,9 @@
                                                                options:0
                                                                  error:&error];
             
+
+            NSLog(@"Shelf Manifst JSON  : %@ ", jsonArr);
+            
             [self updateNewsstandIssuesList:jsonArr];
             
             NSMutableArray *tmpIssues = [NSMutableArray array];
@@ -140,7 +143,16 @@
 - (void)getShelfJSON:(void(^)(NSData*))callback {
     BKRBakerAPI *api = [BKRBakerAPI sharedInstance];
     [api getShelfJSON:^(NSData *json) {
+        NSData *cachedJson;
         NSError *cachedShelfError = nil;
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.shelfManifestPath]) {
+            NSLog(@"[BakerShelf] Loading cached Shelf manifest from %@", self.shelfManifestPath);
+            cachedJson = [NSData dataWithContentsOfFile:self.shelfManifestPath options:NSDataReadingMappedIfSafe error:&cachedShelfError];
+            if (cachedShelfError) {
+                NSLog(@"[BakerShelf] Error loading cached copy of 'shelf.json': %@", cachedShelfError);
+            }
+        }
         
         if (json) {
             // Cache the shelf manifest
@@ -149,16 +161,12 @@
             [json writeToFile:self.shelfManifestPath
                       options:NSDataWritingAtomic
                         error:&error];
-            if (cachedShelfError) {
-                NSLog(@"[BakerShelf] ERROR: Unable to cache 'shelf.json' manifest: %@", cachedShelfError);
+            if (error) {
+                NSLog(@"[BakerShelf] ERROR: Unable to cache 'shelf.json' manifest: %@", error);
             }
         } else {
-            if ([[NSFileManager defaultManager] fileExistsAtPath:self.shelfManifestPath]) {
-                NSLog(@"[BakerShelf] Loading cached Shelf manifest from %@", self.shelfManifestPath);
-                json = [NSData dataWithContentsOfFile:self.shelfManifestPath options:NSDataReadingMappedIfSafe error:&cachedShelfError];
-                if (cachedShelfError) {
-                    NSLog(@"[BakerShelf] Error loading cached copy of 'shelf.json': %@", cachedShelfError);
-                }
+            if (cachedJson) {
+                json = cachedJson;
             } else {
                 NSLog(@"[BakerShelf] No cached 'shelf.json' manifest found at %@", self.shelfManifestPath);
                 json = nil;

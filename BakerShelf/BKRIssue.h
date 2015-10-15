@@ -61,8 +61,11 @@ typedef enum transientStates {
 @property (nonatomic, copy) NSURL *coverURL;
 
 @property (nonatomic, copy) NSString *productID;
+@property (nonatomic, copy) NSNumber *version;
+@property (nonatomic, assign) BOOL update;
 @property (nonatomic, copy) NSString *price;
 
+@property (nonatomic, strong) NSString *IssueManifestPath;
 @property (nonatomic, strong) BKRBook *bakerBook;
 
 @property (nonatomic, assign) BakerIssueTransientStatus transientStatus;

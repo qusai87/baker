@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		20CC551D16AD346900DEFB5C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 20CC551F16AD346900DEFB5C /* Localizable.strings */; };
+		28668FDE1BCFA34D0083261E /* settings_localhost.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28668FDD1BCFA34D0083261E /* settings_localhost.plist */; };
+		28668FE01BCFA4300083261E /* settings_release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28668FDF1BCFA4300083261E /* settings_release.plist */; };
 		904033901A10FF230035071A /* BKRShelfViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9040338F1A10FF230035071A /* BKRShelfViewLayout.m */; };
 		904C31E71A12645C00E53E66 /* BKRCategoryFilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 904C31E61A12645C00E53E66 /* BKRCategoryFilterItem.m */; };
 		9F55576815B4C6C3003072A3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F55576515B4C6B7003072A3 /* QuartzCore.framework */; };
@@ -68,6 +70,8 @@
 
 /* Begin PBXFileReference section */
 		20CC551E16AD346900DEFB5C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		28668FDD1BCFA34D0083261E /* settings_localhost.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = settings_localhost.plist; sourceTree = "<group>"; };
+		28668FDF1BCFA4300083261E /* settings_release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = settings_release.plist; sourceTree = "<group>"; };
 		9040338E1A10FF230035071A /* BKRShelfViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRShelfViewLayout.h; sourceTree = "<group>"; };
 		9040338F1A10FF230035071A /* BKRShelfViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKRShelfViewLayout.m; sourceTree = "<group>"; };
 		904C31E51A12645C00E53E66 /* BKRCategoryFilterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKRCategoryFilterItem.h; sourceTree = "<group>"; };
@@ -364,6 +368,8 @@
 				C659B2921A38BA3700CA238C /* newsstand-app-icon@2x.png */,
 				C659B2931A38BA3700CA238C /* newsstand-app-icon@3x.png */,
 				C649F09C1A0926CD00B02548 /* settings.plist */,
+				28668FDF1BCFA4300083261E /* settings_release.plist */,
+				28668FDD1BCFA34D0083261E /* settings_localhost.plist */,
 				ABAFB59A15AB9A2E002FA498 /* BKRAppDelegate.h */,
 				ABAFB59B15AB9A2E002FA498 /* BKRAppDelegate.m */,
 				ABAFB59215AB9A2E002FA498 /* Supporting Files */,
@@ -456,10 +462,12 @@
 				C659B2941A38BA3700CA238C /* newsstand-app-icon.png in Resources */,
 				C659B2951A38BA3700CA238C /* newsstand-app-icon@2x.png in Resources */,
 				C659B2961A38BA3700CA238C /* newsstand-app-icon@3x.png in Resources */,
+				28668FDE1BCFA34D0083261E /* settings_localhost.plist in Resources */,
 				BF78D1B0180C8F070093DFBC /* BakerAssets.xcassets in Resources */,
 				20CC551D16AD346900DEFB5C /* Localizable.strings in Resources */,
 				BF0785EB1794AF4000EB988E /* info in Resources */,
 				C649F09D1A0926CD00B02548 /* settings.plist in Resources */,
+				28668FE01BCFA4300083261E /* settings_release.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
