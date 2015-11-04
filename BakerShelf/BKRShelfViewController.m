@@ -84,11 +84,10 @@
 
             [[SKPaymentQueue defaultQueue] addTransactionObserver:purchasesManager];
         }
-
+        shouldForceOrientationUpdate = YES;
         api                       = [BKRBakerAPI sharedInstance];
         issuesManager             = [BKRIssuesManager sharedInstance];
         notRecognisedTransactions = [[NSMutableArray alloc] init];
-
         _shelfStatus = [[BKRShelfStatus alloc] init];
         _issueViewControllers = [[NSMutableArray alloc] init];
         _supportedOrientation = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
@@ -105,7 +104,7 @@
     self = [self init];
     if (self) {
         self.issues = currentBooks;
-
+        
         NSMutableArray *controllers = [NSMutableArray array];
         for (BKRIssue *issue in self.issues) {
             BKRIssueViewController *controller = [self createIssueViewControllerWithIssue:issue];
@@ -196,13 +195,43 @@
 
     }
 }
+- (BOOL)forceOrientationUpdate {
+    // We need to run this only once to prevent looping in -viewWillAppear
+    if (shouldForceOrientationUpdate) {
+        shouldForceOrientationUpdate = NO;
+        UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        
+        if (UIInterfaceOrientationIsPortrait(interfaceOrientation) ) {
+            //NSLog(@"[ShelfView] Device orientation is in sync");
+            return NO;
+        } else {
+            //NSLog(@"[ShelfView] Device orientation is out of sync, force orientation update");
+            
+            // Present and dismiss a vanilla view controller to trigger the orientation update
+            [self presentViewController:[UIViewController new] animated:NO completion:^{
+                dispatch_after(0, dispatch_get_main_queue(), ^{
+                    [self dismissViewControllerAnimated:NO completion:nil];
+                });
+            }];
+            return YES;
+        }
+        
+    } else {
+        return NO;
+    }
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
+    
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self willRotateToInterfaceOrientation:self.interfaceOrientation duration:0];
-
+    [self willRotateToInterfaceOrientation:UIInterfaceOrientationPortrait duration:0];
+    
+    [self forceOrientationUpdate];
+    
     for (BKRIssueViewController *controller in self.issueViewControllers) {
         controller.issue.transientStatus = BakerIssueTransientStatusNone;
         [controller refresh];
@@ -241,24 +270,28 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     if (self.bookToBeProcessed) {
         [self handleBookToBeProcessed];
     }
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskAll;
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return [self.supportedOrientation indexOfObject:[NSString bkrStringFromInterfaceOrientation:interfaceOrientation]] != NSNotFound;
+     return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
-
 - (BOOL)shouldAutorotate {
     return YES;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (toInterfaceOrientation == UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        shouldForceOrientationUpdate  = YES;
+    }
     realInterfaceOrientation = toInterfaceOrientation;
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }

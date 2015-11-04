@@ -49,6 +49,7 @@
     UIPopoverController *infoPopover;
     BKRPurchasesManager *purchasesManager;
     UIInterfaceOrientation realInterfaceOrientation;
+    BOOL shouldForceOrientationUpdate;
 }
 
 @property (nonatomic, copy) NSArray *issues;

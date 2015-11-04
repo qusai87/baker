@@ -1866,7 +1866,7 @@
 - (BOOL)shouldAutorotate {
     return YES;
 }
-- (NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     if ([self.book.orientation isEqualToString:@"portrait"]) {
         return (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown);
     } else if ([self.book.orientation isEqualToString:@"landscape"]) {
@@ -1891,6 +1891,7 @@
     [indexViewController rotateFromOrientation:fromInterfaceOrientation toOrientation:self.interfaceOrientation];
     [self setCurrentPageHeight];
 }
+
 
 - (BOOL)forceOrientationUpdate {
     // We need to run this only once to prevent looping in -viewWillAppear

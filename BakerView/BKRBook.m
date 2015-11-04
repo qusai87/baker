@@ -108,6 +108,7 @@
 }
 
 - (BOOL)loadBookData:(NSDictionary*)bookData {
+    NSLog(@"Book Data : %@",bookData);
     if (![self validateBookJSON:bookData withRequirements:@[@"title", @"author", @"url", @"contents"]]) {
         return NO;
     }
